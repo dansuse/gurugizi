@@ -14,7 +14,6 @@ class c_dokter extends CI_Controller {
 
 	public function index()
 	{
-		//Coba Edit Boy
 		//$this->load->view('v_header');
 		$this->load->view('v_signup_dokter');
 		//$this->load->view('v_dataakademik_dokter');
