@@ -56,25 +56,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 
 <div id="container">
-	<h1>Registration Form Dokter</h1>
+	<h1>Registration Form Nutritionist</h1>
+	
 	<?php
-		//echo validation_errors();	
-
-		if(!isset($nama)){$nama = '';}
-		if(!isset($tempatLahir)){$tempatLahir = '';}
-		if(!isset($tanggalLahir)){$tanggalLahir = '';}
-		if(!isset($email)){$email = '';}
-		if(!isset($hp)){$hp = '';}
-		if(!isset($alamat)){$alamat = '';}
+		if(isset($error))
+		{
+			echo $error;
+		}
 		
+		if(!isset($nama)){$nama = '';}
+		if(!isset($email)){$email = '';}
+		if(!isset($jenis_kelamin)){$jenis_kelamin = '';}
+		if(!isset($tanggal_lahir)){$tanggal_lahir = '';}
+		if(!isset($domisili)){$domisili= '';}
+	?>
+	
+	<?php
+		//echo validation_errors();
 		echo print_line(2);
-		echo form_open_multipart('c_dokter/fHandleSignup');
+		echo form_open_multipart('c_signup/fHandleNutritionist');
+		
 		echo form_label('Name', 'tbName');
 		echo print_line(1);
-		echo form_input('tbName', $nama, array('placeholder'=>'Masukkan Nama Lengkap disertakan Jabatan', 'class'=>'form-control', 'required'=>''));
+		echo form_input('tbName', $nama, array('placeholder'=>'Masukkan Nama', 'class'=>'form-control', 'required'=>''));
 		echo form_error('tbName');
 		echo print_line(2);
-		
+
 		echo form_label('Email Address', 'tbEmail');
 		echo print_line(1);
 		echo form_input('tbEmail', $email, array('placeholder'=>'Masukkan Email', 'class'=>'form-control', 'required'=>''));
@@ -93,7 +100,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		echo form_error('tbPasswordConf');
 		echo print_line(2);
 
-		echo form_label('Tempat Tanggal Lahir', 'dtpTTL');
+		$laki = false;
+		$perempuan = false;
+		if($jenis_kelamin == 'L'){$laki = true;}
+		if($jenis_kelamin == 'P'){$perempuan = true;}
+		
+		echo form_label('Jenis Kelamin', 'rbGender');
+		echo print_line(1);
+		echo "<div class = 'radio'>";
+		echo "<label>";
+		echo form_radio('rbGender', 'L', $laki, ['required'=>'']);
+		echo "Laki-Laki";
+		echo "</label>";
+		echo "</div>";
+
+		echo "<div class = 'radio'>";
+		echo "<label>";
+		echo form_radio('rbGender', 'P', $perempuan, ['required'=>'']);
+		echo "Perempuan";
+		echo "</label>";
+		echo "</div>";
+		echo form_error('rbGenderf');
+		echo print_line(2);
+
+		echo form_label('Tanggal Lahir', 'dtpBirthday');
 		echo print_line(1);
 		?>
 		<!--div class='input-group date' id='datetimepicker1'>
@@ -102,32 +132,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <span class="glyphicon glyphicon-calendar"></span>
         </span>
     </div-->
-	<div class="row">
+
+		<div class="row">
+
         <div class='col-sm-12'>
-		<?php
-			echo form_input('tbLocation', $tempatLahir, array('placeholder'=>'Masukkan Kota Tempat Lahir', 'class'=>'form-control', 'required'=>''));
-			echo form_error('tbLocation');
-		?>
-			<input name='tbBirthday' value = '<?php echo $tanggalLahir ?>' type='text' class="form-control" id='datetimepicker1' placeholder="MM/DD/YYYY" required />
+				<input name='tbBirthday' value = "<?php echo $tanggal_lahir; ?>" type='text' class="form-control" id='datetimepicker1' placeholder="DD/MM/YYYY" required />
         </div>
+
     </div>
-	
 	<?php
 		echo form_error('tbBirthday');
 		echo print_line(2);
-		
-		echo form_label('No. Telp', 'tbTelp');
+
+		echo form_label('Location', 'tbLocation');
 		echo print_line(1);
-		echo form_input('tbTelp', $hp, array('placeholder'=>'Masukkan Alamat', 'class'=>'form-control', 'required'=>''));
-		echo form_error('tbTelp');
+		echo form_input('tbLocation', $domisili, array('placeholder'=>'Masukkan Kota Tempat Tinggal Sekarang', 'class'=>'form-control', 'required'=>''));
+		echo form_error('tbLocation');
 		echo print_line(2);
 		
-		echo form_label('Alamat', 'tbAlamat');
-		echo print_line(1);
-		echo form_input('tbAlamat', $alamat, array('placeholder'=>'Masukkan Alamat', 'class'=>'form-control', 'required'=>''));
-		echo form_error('tbAlamat');
-		echo print_line(2);
+		//echo validation_errors();
 		
+		echo "Upload File Cv : ".form_upload("fileCv");
+		if(isset($alertCv)){echo $alertCv;}
+		echo '<br>';
+		echo "Upload File Transkrip : ".form_upload("fileTranskrip");
+		if(isset($alertTranskrip)){echo $alertTranskrip;}
+		echo '<br>';
+		echo "Upload File Ijazah : ".form_upload("fileIjazah");
+		if(isset($alertIjazah)){echo $alertIjazah;}
+		echo '<br>';
+		echo "Upload File STR : ".form_upload("fileStr");
+		if(isset($alertStr)){echo $alertStr;}
+		echo '<br>';
+
 		echo form_submit('btnRegister', 'Register', ['class'=>"btn btn-primary btn-block"]);
 		echo form_close();
 	?>
