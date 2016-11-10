@@ -18,5 +18,11 @@ class m_pasien extends CI_Model {
 		$this->db->where('email', $data['email']);
 		$this->db->update('pasien', $data);
 	}
+	public function cekUsernameTersedia($username){
+		return $this->db->get_where('pasien', ['username'=>$username])->row();
+	}
+	public function cekEmailBelumPunyaAkun($email){
+		return $this->db->get_where('pasien', ['email'=>$email])->row();
+	}
 
 }

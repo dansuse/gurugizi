@@ -3,7 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class c_home extends CI_Controller {
 
+	public function __construct() {
+		parent::__construct();
+		$nav = [
+			["nama"=>"Home", "url"=>site_url(['c_home', 'index'])],
+			["nama"=>"Research", "url"=>site_url(['c_home', 'index'])],
+			["nama"=>"Recipe", "url"=>site_url(['c_home', 'index'])],
+			["nama"=>"Home", "url"=>site_url(['c_home', 'index'])]
+		];
 
+	}
 	public function index()
 	{
 		//$this->load->view('v_header');
@@ -27,6 +36,9 @@ class c_home extends CI_Controller {
 		$this->m_pasien->updateProfile($data);
 		redirect('c_home/profile');
 	}
+	public function buatPostingan(){
+		$this->load->view('v_buat_artikel');
+	}
 
 	public function login(){
 		if($this->session->userdata(SESSION_LOGIN_NOW) != false){
@@ -49,6 +61,24 @@ class c_home extends CI_Controller {
 			redirect('c_home/index');
 		}else{
 			$this->load->view('v_login');
+		}
+	}
+	public function cekUsernameTersedia($username){
+		$this->load->model('m_pasien');
+		$temp = $this->m_pasien->cekUsernameTersedia($username);
+		if(is_null($temp)){
+			echo "Tersedia";
+		}else{
+			echo "Tidak Tersedia";
+		}
+	}
+	public function cekEmailBelumPunyaAkun($email){
+		$this->load->model('m_pasien');
+		$temp = $this->m_pasien->cekEmailBelumPunyaAkun(urldecode($email));
+		if(is_null($temp)){
+			echo "";
+		}else{
+			echo "Email sudah terdaftar. Coba pakai email yang lain.";
 		}
 	}
 	public function cekPasswordValid($pass){
