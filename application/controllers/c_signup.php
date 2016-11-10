@@ -11,10 +11,6 @@ class c_signup extends CI_Controller {
 		$this->load->library('session');
 		$this->load->library('upload');
 	}
-	
-	public function index()
-	{
-	}
 
 	public function pasien()
 	{
@@ -188,101 +184,5 @@ class c_signup extends CI_Controller {
 			$this->session->set_flashdata('error', validation_errors());
 			redirect('c_signup/nutritionist');
 		}
-		
-		/*if($this->input->post("btnUpload"))
-		{
-			$id = $this->session->userdata('id');
-			
-			$data['alert'] = '';
-			$config = array(
-			'upload_path' => './dataakademik/',
-			'allowed_types' => 'pdf',
-			'encrypt_name' => true
-			);
-			$this->upload->initialize($config);
-			
-			if(!$this->upload->do_upload('fileTranskrip')){
-				$data['alertTranskrip'] = $this->upload->display_errors();
-			}
-			else{
-				$getUpload = $this->upload->data();
-				$nama = $getUpload['file_name'];
-				$dataUpdate = array('transkrip'=>$nama);
-				$this->m_dokter->updateDataDokter($id,$dataUpdate);
-				$data['alertTranskrip'] = 'Berhasil Upload';
-			}
-			
-			if(!$this->upload->do_upload('fileIjazah')){
-				$data['alertIjazah'] = $this->upload->display_errors();
-			}
-			else{
-				$getUpload = $this->upload->data();
-				$nama = $getUpload['file_name'];
-				$dataUpdate = array('ijazah'=>$nama);
-				$this->m_dokter->updateDataDokter($id,$dataUpdate);
-				$data['alertIjazah'] = 'Berhasil Upload';
-			}
-			
-			if(!$this->upload->do_upload('filePengalamanKerja')){
-				$data['alertPK'] = $this->upload->display_errors();
-			}
-			else{
-				$getUpload = $this->upload->data();
-				$nama = $getUpload['file_name'];
-				$dataUpdate = array('pengalamankerja'=>$nama);
-				$this->m_dokter->updateDataDokter($id,$dataUpdate);
-				$data['alertPK'] = 'Berhasil Upload';
-			}
-			
-			$this->load->view('v_dataakademik_dokter',$data);
-		}*/
-		
-		/*$this->form_validation->set_rules('tbName', 'Name', 'required');
-		$this->form_validation->set_rules('tbEmail', 'Email', 'required|valid_email');
-		$this->form_validation->set_rules('tbPassword', 'Password', 'required');
-		$this->form_validation->set_rules('tbPasswordConf', 'Konfirmasi Password', 'required|matches[tbPassword]');
-		$this->form_validation->set_rules('tbBirthday', 'Birthday', 'required');
-		$this->form_validation->set_rules('tbLocation', 'Location', 'required');
-		$this->form_validation->set_rules('tbTelp', 'Telp', 'required|numeric');
-		$this->form_validation->set_rules('tbAlamat', 'Alamat', 'required');
-
-		$data['nama'] = $this->input->post('tbName');
-		$data['tempatLahir'] = $this->input->post('tbLocation');
-		$data['tanggalLahir'] = $this->input->post('tbBirthday');
-		$data['email'] = $this->input->post('tbEmail');
-		$data['hp'] = $this->input->post('tbTelp');
-		$data['alamat'] = $this->input->post('tbAlamat');
-		$data['errorID'] = '';
-		
-		if($this->form_validation->run()){
-			$cekID = $this->m_dokter->cekID($data['email']);
-			if($cekID == 0)
-			{
-				$data = [
-				'nama'=>$this->input->post('tbName'),
-				'ttl'=>$this->input->post('tbLocation').','.date('Y-m-d', strtotime($this->input->post('tbBirthday'))),
-				'email'=>$this->input->post('tbEmail'),
-				'password'=>$this->input->post('tbPassword'),
-				'hp'=>$this->input->post('tbTelp'),
-				'alamat'=>$this->input->post('tbAlamat')
-				];
-				$aff = $this->m_dokter->regDokter($data);
-				if($aff == 1)
-				{
-					$this->session->set_userdata('id',$data['email']);
-					$this->m_dokter->buatDataDokter($data['email']);
-					$this->load->view('v_dataakademik_dokter');
-				}
-				else{echo 'gagal';}
-			}
-			else
-			{
-				$errorID = 'Maaf Alamat Email '.$data['email'].' Telah Digunakan';
-				$data['email'] = $errorID;
-				$this->load->view('v_signup_dokter',$data);
-			}
-		}else{
-			$this->load->view('v_signup_dokter',$data);
-		}*/
 	}
 }

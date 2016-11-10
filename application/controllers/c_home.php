@@ -2,9 +2,17 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class c_home extends CI_Controller {
+	function __construct(){
+		parent::__construct();
+		$this->load->model('m_nutritionist');
+		$this->load->model('m_pasien');
+		$this->load->helper('form');
+		$this->load->helper('url');
+		$this->load->library('session');
+		$this->load->library('upload');
+	}
 
-
-	public function index()
+	/*public function index()
 	{
 		//$this->load->view('v_header');
 		$this->load->view('v_home');
@@ -118,5 +126,5 @@ class c_home extends CI_Controller {
 		}else{
 			$this->load->view('v_signup_pasien');
 		}
-	}
+	}*/
 }
