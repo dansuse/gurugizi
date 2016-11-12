@@ -18,5 +18,29 @@ class m_nutritionist extends CI_Model {
 		$this->db->where('email', $data['email']);
 		$this->db->update('nutritionist', $data);
 	}
-
+	public function delete($data){
+		$this->db->where('email_nutritionist', $data['email']);
+		$this->db->delete('jawaban');
+		$this->db->where('email_nutritionist', $data['email']);
+		$this->db->delete('postingan');
+		$this->db->where('email', $data['email']);
+		$this->db->delete('nutritionist', $data);
+	}
+	public function getAll($limit=null,$start=null,$keyword=null,$kategori=null,$tanggal=null){
+		$this->db->limit($limit,$start);
+		if($keyword != null)
+		{
+			if($kategori!='tanggal_lahir')
+			{
+				$this->db->like($kategori, $keyword);
+			}
+			else
+			{
+				$this->db->where($kategori.' '.$tanggal.' ', $keyword);
+			}
+		}
+		
+		$this->db->order_by('tanggal_lahir','desc');
+		return $this->db->get('nutritionist')->result();
+	}
 }
