@@ -17,6 +17,11 @@ class c_laporan extends CI_Controller {
 		$this->load->library('pagination');
 		$this->load->helper('download');
 		$this->load->helper('file');
+		
+		if($this->session->userdata('admin') == null)
+		{
+			redirect('c_home');
+		}
 	}
 	
 	public function index()
