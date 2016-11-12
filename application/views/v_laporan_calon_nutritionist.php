@@ -90,10 +90,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div id="container">
 
-	<H1>Laporan Dokter</H1>
+	<H1>Laporan Calon Dokter</H1>
 	<HR>
 	<?php
-		echo form_open('c_laporan/fHandleNutritionist');
+		echo form_open('c_laporan/fHandleCalonNutritionist');
 		
 		if(!isset($perPage)){$perPage=5;}
 		if(!isset($keyword)){$keyword='';}
@@ -206,13 +206,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$convertEmail = str_replace("@", ':', $p->email);
 			
 			echo '<p>';
-			echo '<a style="text-decoration:none; color:black;" href = "'.site_url('c_laporan/riwayatPostingan/'.$convertEmail).'"><input style="width:180px;" type = "button" value = "Riwayat Postingan">'.'</input></a>';
+			echo '<a style="text-decoration:none; color:black;" href = "'.site_url('c_laporan/terimaCalonNutritionist/'.$convertEmail).'"><input style="width:180px;" type = "button" value = "Terima">'.'</input></a>';
 			echo '</p>';
+			
 			echo '<p>';
-			echo '<a style="text-decoration:none; color:black;" href = "'.site_url('c_laporan/riwayatJawaban/'.$convertEmail).'"><input style="width:180px;" type = "button" value = "Riwayat Jawaban">'.'</input></a>';
-			echo '</p>';
-			echo '<p>';
-			echo '<a style="text-decoration:none; color:black;" href = "'.site_url('c_laporan/deleteNutritionist/'.$convertEmail).'"><input style="width:180px;" type = "button" value = "Delete User">'.'</input></a>';
+			echo '<a style="text-decoration:none; color:black;" href = "'.site_url('c_laporan/deleteCalonNutritionist/'.$convertEmail).'"><input style="width:180px;" type = "button" value = "Tolak">'.'</input></a>';
 			echo '</p>';
 			
 			echo '<HR>';

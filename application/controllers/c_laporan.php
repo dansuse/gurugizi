@@ -10,10 +10,13 @@ class c_laporan extends CI_Controller {
 		$this->load->model('m_komentar');
 		$this->load->model('m_postingan');
 		$this->load->model('m_jawaban');
+		$this->load->model('m_calon_nutritionist');
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->library('session');
 		$this->load->library('pagination');
+		$this->load->helper('download');
+		$this->load->helper('file');
 	}
 	
 	public function index()
@@ -87,6 +90,41 @@ class c_laporan extends CI_Controller {
 		$this->load->view('v_laporan_nutritionist',$data);
 	}
 	
+	public function calonnutritionist()
+	{
+		$this->session->keep_flashdata('per_page');
+		$this->session->keep_flashdata('keyword');
+		$this->session->keep_flashdata('kategori');
+		$this->session->keep_flashdata('tanggal');
+		
+		$perPage = 5;
+		if($this->session->flashdata('per_page') != null)
+		{
+			$perPage = $this->session->flashdata('per_page');
+		}
+		
+		$per_page = $perPage;
+		$keyword = $this->session->flashdata('keyword');
+		$kategori = $this->session->flashdata('kategori');
+		$tanggal = $this->session->flashdata('tanggal');
+		
+		$config = array();
+		$config['base_url'] = site_url('c_laporan/calonnutritionist');
+		$config["per_page"] = $per_page;
+		$config["uri_segment"] = 3;
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$config['total_rows'] = sizeof($this->m_calon_nutritionist->getAll(null,null,$keyword,$kategori,$tanggal));
+		$this->pagination->initialize($config);
+		
+		$data['links'] = $this->pagination->create_links();
+		$data['perPage'] = $this->session->flashdata('per_page');
+		$data['keyword'] = $this->session->flashdata('keyword');
+		$data['kategori'] = $this->session->flashdata('kategori');
+		$data['tanggal'] = $this->session->flashdata('tanggal');
+		$data['nutritionist'] = $this->m_calon_nutritionist->getAll($config['per_page'],$page,$keyword,$kategori,$tanggal);
+		$this->load->view('v_laporan_calon_nutritionist',$data);
+	}
+	
 	public function deletePasien($email)
 	{
 		$convertEmail = str_replace(":", '@', $email);
@@ -112,6 +150,32 @@ class c_laporan extends CI_Controller {
 		}
 		$this->m_nutritionist->delete($data);
 		redirect('c_laporan/nutritionist');
+	}
+	
+	public function deleteCalonNutritionist($email)
+	{
+		$convertEmail = str_replace(":", '@', $email);
+		$data = array(
+			'email' => $convertEmail
+		);
+		$postingan = $this->m_postingan->getAll(null,null,null,null,null,$convertEmail);
+		foreach($postingan as $p)
+		{
+			$this->m_postingan->delete($p->id_postingan);
+		}
+		$this->m_nutritionist->delete($data);
+		redirect('c_laporan/calonnutritionist');
+	}
+	
+	public function terimaCalonNutritionist($email)
+	{
+		$convertEmail = str_replace(":", '@', $email);
+		$data = array(
+			'email' => $convertEmail,
+			'keterangan' => 'diterima'
+		);
+		$this->m_nutritionist->updateProfile($data);
+		redirect('c_laporan/calonnutritionist');
 	}
 	
 	public function deletePertanyaan($email,$id_pertanyaan)
@@ -431,5 +495,42 @@ class c_laporan extends CI_Controller {
 		{
 			redirect('c_laporan/nutritionist');
 		}
+	}
+	
+	public function fHandleCalonNutritionist(){
+		
+		if($this->input->post('btnRefresh'))
+		{
+			$perPage = $this->input->post('nPerPage');
+			$keyword = $this->input->post('tbKeyword');
+			$tanggal = $this->input->post('rbFilterTanggal');
+			$kategori = $this->input->post('ddKategori');
+			if($kategori == 'tanggal_lahir')
+			{
+				$keyword = date('Y-m-d', strtotime($this->input->post('tbKeyword')));
+			}
+			else
+			{
+				$keyword = $this->input->post('tbKeyword');
+			}
+			
+			$this->session->set_flashdata('per_page',$perPage);
+			$this->session->set_flashdata('keyword',$keyword);
+			$this->session->set_flashdata('kategori',$kategori);
+			$this->session->set_flashdata('tanggal',$tanggal);
+			redirect('c_laporan/calonnutritionist');
+		}
+		
+		if($this->input->post('btnKembaliKeLapNutritionist'))
+		{
+			redirect('c_laporan/calonnutritionist');
+		}
+	}
+	
+	public function downloadFileAkademik($jenis,$fileName)
+	{
+		$data = file_get_contents(base_url('/dataakademik/'.$fileName));
+		$name = $jenis.'.pdf';
+		force_download($name, $data);
 	}
 }

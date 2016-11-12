@@ -1,9 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class m_nutritionist extends CI_Model {
-
-
+class m_calon_nutritionist extends CI_Model {
 	public function regNutritionist($data)
 	{
 		$this->db->insert('nutritionist', $data);
@@ -39,7 +37,7 @@ class m_nutritionist extends CI_Model {
 				$this->db->where($kategori.' '.$tanggal.' ', $keyword);
 			}
 		}
-		$this->db->where('keterangan', 'diterima');
+		$this->db->where('keterangan', '');
 		$this->db->order_by('tanggal_lahir','desc');
 		return $this->db->get('nutritionist')->result();
 	}
